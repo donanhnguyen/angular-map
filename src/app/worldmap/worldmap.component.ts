@@ -24,6 +24,7 @@ export class WorldmapComponent implements OnInit {
   }
 
   private addEventListeners(container: HTMLElement): void {
+    // adding mouse click event handlers
     const paths = container.querySelectorAll('path');
     paths.forEach((path) => {
       path.addEventListener('click', (event) => this.onPathClick(event));
@@ -31,6 +32,7 @@ export class WorldmapComponent implements OnInit {
   }
 
   onPathClick(event: Event): void {
+    // event handler itself
     const target = event.target as SVGPathElement;
     const countryName = target.getAttribute('name');
     const countryId = target.getAttribute('id');
