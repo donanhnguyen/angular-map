@@ -1,8 +1,6 @@
 .worldmap-container {
-    width: 100%;
+    width: 80%;
     height: 80vh; 
-    max-width: 1600px; 
-    margin: 0 auto; 
   }
   
   #worldmap {
@@ -12,19 +10,15 @@
     cursor: pointer;
   }
   
+.all-container {
+  border: 5px solid black;
+  display: flex;
+  flex-direction: row;
+}
 
-  svg {
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-  }
-  
-  path {
-    fill: #cccccc; 
-    stroke: #ffffff; 
-    stroke-width: 0.5;
-  }
-  
-  path:hover {
-    fill: #3498db; 
-  }
+.country-info {
+  border: 1px solid blue;
+  min-height: 100%;
+  width: 20%;
+}
+
