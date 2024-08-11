@@ -3,12 +3,12 @@
     height: 80vh; 
   }
   
-  #worldmap {
+#worldmap {
     width: 100%;
     height: 100%;
     display: block; 
     cursor: pointer;
-  }
+}
   
 .all-container {
   border: 5px solid black;
@@ -17,7 +17,7 @@
 }
 
 .country-info {
-  border: 1px solid blue;
+  border-left: 1px solid rgba(0, 106, 255, 0.595);
   min-height: 100%;
   width: 20%;
   font-size: .7em;

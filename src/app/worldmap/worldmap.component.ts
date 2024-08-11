@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; 
 import { CountryinfoComponent } from '../countryinfo/countryinfo.component';
+import { CountryService } from '../country.service';
 
 @Component({
   selector: 'app-worldmap',
@@ -12,8 +13,17 @@ import { CountryinfoComponent } from '../countryinfo/countryinfo.component';
 })
 export class WorldmapComponent implements OnInit {
 
-  constructor(private http: HttpClient, private el: ElementRef) {}
+  countryName: string | null = null;
+  countryCapital: string | null = null;
+  countryRegion: string | null = null;
+  countryIncomeLevel: string | null = null;
+  countryAdditionalFactOne: string | null = null;
+  countryAdditionalFactTwo: string | null = null;
+  countryId: string | null = null;
+  countryCode: string | null = null;
 
+  constructor(private countryService: CountryService, private http: HttpClient, private el: ElementRef) {}
+  
   ngOnInit(): void {
     // Load the SVG content and inject it into the component
     this.http.get('../../assets/map-image.svg', { responseType: 'text' }).subscribe(svgContent => {
@@ -32,10 +42,52 @@ export class WorldmapComponent implements OnInit {
   }
 
   onPathClick(event: Event): void {
+    const paths = this.el.nativeElement.querySelectorAll('path');
+      paths.forEach((path: any) => {
+        path.style.fill = '';
+    });
+
     // event handler itself
     const target = event.target as SVGPathElement;
-    const countryName = target.getAttribute('name');
-    const countryId = target.getAttribute('id');
-    console.log(`Country clicked: Name = ${countryName}, ID = ${countryId}`);
+    const clickedCountryId = target.getAttribute('id');
+
+    this.countryName = target.getAttribute('name');
+    this.countryId = target.getAttribute('id');
+    if (this.countryId === clickedCountryId) {
+      target.style.fill = '#3498db';
+    } 
+    if (this.countryId) {
+      this.fetchInfoAboutCountry(this.countryId)
+    }
   }
+
+  fetchInfoAboutCountry (countryCode: string): void {
+
+    this.countryService.getCountryInfo(countryCode).subscribe({
+      next: (data) => {
+          const allData = data[1][0];
+          this.countryCode = allData.id
+          this.countryCapital = allData.capitalCity;
+          this.countryRegion = allData.region.value;
+          this.countryIncomeLevel = allData.incomeLevel.value;
+  
+      },
+      error: (error) => {
+        console.error('Error:', error);
+      },
+      complete: () => {
+        console.log('Completed.');
+      }
+    });
+    if (this.countryId) {
+          this.countryService.getAdditionalInfo(this.countryId).subscribe({
+            next: (data) => {
+              const allData = data[1][0];
+              this.countryAdditionalFactOne = allData.countryiso3code;
+              this.countryAdditionalFactTwo = allData.value.toString();
+            }
+          }) 
+    }
+  }
+  
 }
